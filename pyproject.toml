@@ -7,7 +7,14 @@ authors = [
     { name = "Oddur Sigurdsson", email = "oddurs@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    # Kev pinned to the commit docs/ was written against; the local clone is for reading only
+    "kev[mlx] @ git+https://github.com/jaredpalmer/kev@250330b58019890a5e327d16b3c3c38d95ae069b",
+    "peft>=0.21",
+    "torch>=2.6,<2.9",
+    "transformers>=5.17,<6",   # Kev's floor for Qwen3.5
+    "mlx-lm>=0.31.3,<0.32; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
 
 [build-system]
 requires = ["uv_build>=0.12.3,<0.13.0"]
@@ -16,4 +23,16 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
+    "ruff>=0.13",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not weights'"
+markers = ["weights: downloads or loads model weights; run with `-m weights`"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
