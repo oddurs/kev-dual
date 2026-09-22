@@ -6,13 +6,9 @@ One model that thinks and decides: text generation plus Kev-style typed, calibra
 
 ## load — Load: one model, two modes
 
-`#########·` 83% · 5 of 6 done · due 2026-09-25
+`##########` 100% · 6 of 6 done · due 2026-09-25
 
 Kev-4B's decide mode and Qwen3.5-4B's text mode run from one loaded set of weights on Apple Silicon (MLX).
-
-### planned
-
-- [ ] `0013` Torch/CUDA backend of DualModel for Modal <sup>feature · p2 · serving</sup>
 
 ### done
 
@@ -21,16 +17,18 @@ Kev-4B's decide mode and Qwen3.5-4B's text mode run from one loaded set of weigh
 - [x] `0010` Can Kev's PEFT adapter run unmerged in mlx-lm with a runtime on/off? <sup>spike · p0 · model</sup>
 - [x] `0011` DualModel on MLX: one set of weights, decide and text modes <sup>feature · p0 · model</sup>
 - [x] `0012` Baseline cost of each mode and of a mode switch on Kev-4B <sup>experiment · p1 · model · pass</sup>
+- [x] `0013` Torch/CUDA backend of DualModel for Modal <sup>feature · p2 · serving</sup>
 
 ## write — Write: choose how text mode writes
 
-`##········` 14% · 1 of 7 done · due 2026-09-30
+`##········` 13% · 1 of 8 done · due 2026-09-30
 
 Kev is trained on Base checkpoints, which write poorly. Measure how poorly, on the text an agent step actually needs, before choosing a fix. See docs/design/architecture.md.
 
 ### backlog
 
 - [ ] `0018` Second LoRA for generation on the Base checkpoint (fallback) <sup>experiment · p3 · training</sup>
+- [ ] `0040` Run the torch weight tests on a Modal CUDA GPU <sup>chore · p1 · infra</sup>
 
 ### planned
 
