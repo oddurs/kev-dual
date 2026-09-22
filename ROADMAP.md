@@ -6,13 +6,12 @@ One model that thinks and decides: text generation plus Kev-style typed, calibra
 
 ## load — Load: one model, two modes
 
-`####······` 33% · 2 of 6 done · due 2026-09-25
+`#####·····` 50% · 3 of 6 done · due 2026-09-25
 
 Kev-4B's decide mode and Qwen3.5-4B's text mode run from one loaded set of weights on Apple Silicon (MLX).
 
 ### planned
 
-- [ ] `0010` Can Kev's PEFT adapter run unmerged in mlx-lm with a runtime on/off? <sup>spike · p0 · model</sup>
 - [ ] `0011` DualModel on MLX: one set of weights, decide and text modes <sup>feature · p0 · model</sup>
 - [ ] `0012` Baseline cost of each mode and of a mode switch on Kev-4B <sup>experiment · p1 · model</sup>
 - [ ] `0013` Torch/CUDA backend of DualModel for Modal <sup>feature · p2 · serving</sup>
@@ -21,6 +20,7 @@ Kev-4B's decide mode and Qwen3.5-4B's text mode run from one loaded set of weigh
 
 - [x] `0008` Adopt cairn and write the research and context docs <sup>chore · p1 · infra</sup>
 - [x] `0009` Set up the package: dependencies, lint and test markers <sup>chore · p0 · infra</sup>
+- [x] `0010` Can Kev's PEFT adapter run unmerged in mlx-lm with a runtime on/off? <sup>spike · p0 · model</sup>
 
 ## write — Write: choose how text mode writes
 
