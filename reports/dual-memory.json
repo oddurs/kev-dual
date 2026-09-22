@@ -1,0 +1,12 @@
+{
+ "run": "jaredpalmer/kev-4b",
+ "weights_gb": 8.476,
+ "adapter_gb": 0.065,
+ "active_after_load_gb": 8.476,
+ "peak_decide_gb": 8.785,
+ "sample": {
+  "prompt": "Task: book a flight from Zurich to London on Friday.\nFirst step:",
+  "text": " check the availability of flights.\nSecond step: select the best flight option.\nThird step: book the flight.\nFourth step: confirm the booking.\nFifth step: receive a confirmation email.\nSixth step: check the confirmation email.\nSeventh step: print the confirmation.\nEighth"
+ },
+ "peak_generate_gb": 8.569
+}
