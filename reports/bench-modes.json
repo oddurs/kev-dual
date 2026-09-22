@@ -1,0 +1,116 @@
+{
+ "run": "jaredpalmer/kev-4b",
+ "machine": "Apple M5 Pro, 48 GB, macOS 26.5.2",
+ "reps": 20,
+ "kev_merged": {
+  "270": {
+   "tokens": 363,
+   "new_state": {
+    "median_ms": 216.6,
+    "p90_ms": 220.8
+   },
+   "cached_state": {
+    "median_ms": 81.6,
+    "p90_ms": 83.5
+   }
+  },
+  "1024": {
+   "tokens": 1117,
+   "new_state": {
+    "median_ms": 499.3,
+    "p90_ms": 501.1
+   },
+   "cached_state": {
+    "median_ms": 84.5,
+    "p90_ms": 85.0
+   }
+  },
+  "2048": {
+   "tokens": 2141,
+   "new_state": {
+    "median_ms": 939.0,
+    "p90_ms": 957.6
+   },
+   "cached_state": {
+    "median_ms": 90.3,
+    "p90_ms": 91.6
+   }
+  }
+ },
+ "dual_decide": {
+  "270": {
+   "tokens": 363,
+   "new_state": {
+    "median_ms": 266.9,
+    "p90_ms": 269.3
+   },
+   "cached_state": {
+    "median_ms": 100.8,
+    "p90_ms": 101.8
+   }
+  },
+  "1024": {
+   "tokens": 1117,
+   "new_state": {
+    "median_ms": 645.4,
+    "p90_ms": 657.7
+   },
+   "cached_state": {
+    "median_ms": 108.8,
+    "p90_ms": 110.1
+   }
+  },
+  "2048": {
+   "tokens": 2141,
+   "new_state": {
+    "median_ms": 1235.1,
+    "p90_ms": 1310.6
+   },
+   "cached_state": {
+    "median_ms": 127.6,
+    "p90_ms": 174.8
+   }
+  }
+ },
+ "dual_generate": {
+  "270": {
+   "median_ms": 1266.1,
+   "p90_ms": 1302.5,
+   "prompt_tokens": 270,
+   "generated_tokens": 32,
+   "prompt_tps": 801.3,
+   "generation_tps": 31.3
+  },
+  "1024": {
+   "median_ms": 1878.1,
+   "p90_ms": 1917.7,
+   "prompt_tokens": 1024,
+   "generated_tokens": 32,
+   "prompt_tps": 1900.9,
+   "generation_tps": 29.8
+  },
+  "2048": {
+   "median_ms": 2135.2,
+   "p90_ms": 2584.9,
+   "prompt_tokens": 2048,
+   "generated_tokens": 32,
+   "prompt_tps": 1835.5,
+   "generation_tps": 21.2
+  }
+ },
+ "switch": {
+  "270": {
+   "decide_after_generate_ms": 308.5,
+   "decide_after_decide_ms": 305.1
+  },
+  "1024": {
+   "decide_after_generate_ms": 644.2,
+   "decide_after_decide_ms": 763.3
+  },
+  "2048": {
+   "decide_after_generate_ms": 1096.3,
+   "decide_after_decide_ms": 1140.5
+  }
+ },
+ "peak_memory_gb": 17.9
+}
