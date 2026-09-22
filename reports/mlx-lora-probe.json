@@ -1,0 +1,44 @@
+{
+ "run": "jaredpalmer/kev-4b",
+ "records": 40,
+ "reference": "kev MLX, adapter merged (bf16)",
+ "latency": {
+  "merged": {
+   "tokens": 195,
+   "miss_ms": 146.5,
+   "hit_ms": 56.1
+  },
+  "unmerged_float32": {
+   "tokens": 195,
+   "miss_ms": 193.9,
+   "hit_ms": 71.0
+  },
+  "unmerged_bfloat16": {
+   "tokens": 195,
+   "miss_ms": 180.3,
+   "hit_ms": 67.3
+  },
+  "adapter_off": {
+   "tokens": 195,
+   "miss_ms": 148.9,
+   "hit_ms": 56.3
+  }
+ },
+ "adapted_layers": 248,
+ "unmerged_float32": {
+  "questions": 40,
+  "max_dp": 0.01327824592590332,
+  "mean_dp": 0.0022445441398303958,
+  "argmax_flips": 0,
+  "over_0.02": 0
+ },
+ "unmerged_bfloat16": {
+  "questions": 40,
+  "max_dp": 0.012398630380630493,
+  "mean_dp": 0.002056263934355229,
+  "argmax_flips": 0,
+  "over_0.02": 0
+ },
+ "switch_round_trip_identical": true,
+ "peak_memory_gb": 17.9
+}
