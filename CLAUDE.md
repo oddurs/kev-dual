@@ -8,6 +8,14 @@ One model that thinks and decides: Kev's typed, calibrated decisions and text ge
 - **Facts come from sources, dated.** The ecosystem changes daily. Research answers go in the spike's body; lasting ones also go in `docs/`, with links.
 - **No weights or dataset copies in git.** `runs/` is ignored. Mind2Web asks that its data not be redistributed, so commit manifests and hashes only.
 - **On a Mac, one training or eval job on the GPU at a time.** Long runs go to Modal.
+- **Every change lands through a PR, and GitHub enforces it.** The flow is:
+  1. One cairn item per branch (`<type>/<NNNN>-<slug>`), cut from fresh `origin/main`.
+  2. Run the gates locally before pushing: `ruff check`, `ruff format --check`, `pytest`, `pytest -m weights` when model code changed, and `cairn check`.
+  3. Open a PR titled `<type>: <summary> (cairn NNNN)`.
+  4. CI must be green. `main` is protected: PRs only, required checks, linear history.
+  5. Squash-merge.
+
+  Never tick a criterion or close an item in a commit whose gates failed.
 
 <!-- cairn:begin -->
 ## Roadmap and issues

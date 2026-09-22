@@ -1,0 +1,68 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      # keep in step with ruff in uv.lock
+      - run: uvx ruff@0.16.8 check .
+      - run: uvx ruff@0.16.8 format --check .
+
+  test:
+    name: test
+    # mlx needs Apple Silicon; macos-latest is arm64. The weight tests are skipped by default (`-m weights` runs them).
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run pytest -q
+
+  backlog:
+    name: backlog
+    runs-on: ubuntu-latest
+    env:
+      CAIRN_VERSION: 0.2.1
+      CAIRN_NO_HOOKS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cairn
+        run: |
+          base=https://github.com/oddurs/cairn/releases/download/v$CAIRN_VERSION
+          file=cairn-$CAIRN_VERSION-x86_64-unknown-linux-musl.tar.gz
+          curl -fsSLO "$base/$file" -fsSLO "$base/SHA256SUMS"
+          grep " $file\$" SHA256SUMS | sha256sum -c -
+          tar xzf "$file"
+          install -D -m 755 "cairn-$CAIRN_VERSION-x86_64-unknown-linux-musl/cairn" "$HOME/.local/bin/cairn"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - run: cairn --version
+      - run: cairn check
+      - name: ROADMAP.md is what the items render to
+        run: |
+          cairn render -q
+          git diff --exit-code ROADMAP.md || { echo "::error::ROADMAP.md is stale; run \`cairn render\` and commit it"; exit 1; }
+
+  pr-title:
+    name: pr names its item
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Title ends with (cairn NNNN)
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if [[ ! "$TITLE" =~ \(cairn\ [0-9]{4}\)$ ]]; then
+            echo "::error::PR title must end with the cairn item it closes, e.g. 'feat: DualModel on MLX (cairn 0011)'"
+            exit 1
+          fi
