@@ -24,6 +24,8 @@ class _Decider(DecisionModel):
         self.lm = backbone
         self.pad_id = pad_id(tok)
         self.hybrid = is_hybrid(backbone.config)
+        if self.hybrid and option_isolation:  # the guard DecisionModel.__init__ applies
+            raise ValueError("option_isolation needs the packed mask; not available on hybrid backbones")
         self.option_isolation = option_isolation
         self.head = PointerHead(backbone.config.hidden_size, dp=head_dim)
         self.device = device
