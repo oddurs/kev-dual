@@ -11,6 +11,8 @@ KEV_REPO = Path(os.environ.get("KEV_REPO", "~/Code/jevv/kev")).expanduser()
 
 def records(suite="evals/v4/transfer-v4", split="development", n=None):
     """Materialized records of one split. With `n`, an evenly spaced sample so every source is represented."""
+    if n is not None and n < 1:
+        raise ValueError(f"n must be at least 1, got {n}")
     path = KEV_REPO / suite / f"{split}.jsonl"
     if not path.exists():
         raise FileNotFoundError(f"{path} not found; set KEV_REPO to a Kev checkout at the pinned commit")

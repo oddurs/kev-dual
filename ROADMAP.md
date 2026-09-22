@@ -21,7 +21,7 @@ Kev-4B's decide mode and Qwen3.5-4B's text mode run from one loaded set of weigh
 
 ## write — Write: choose how text mode writes
 
-`##········` 13% · 1 of 8 done · due 2026-09-30
+`###·······` 22% · 2 of 9 done · due 2026-09-30
 
 Kev is trained on Base checkpoints, which write poorly. Measure how poorly, on the text an agent step actually needs, before choosing a fix. See docs/design/architecture.md.
 
@@ -41,6 +41,7 @@ Kev is trained on Base checkpoints, which write poorly. Measure how poorly, on t
 ### done
 
 - [x] `0041` Enforce the workflow: CI, required checks and squash-only merges <sup>chore · p0 · infra</sup>
+- [x] `0042` Fix the two edge cases from the code review <sup>bug · p2 · model</sup>
 
 ## share — Share: one prefill, two modes
 
