@@ -1,0 +1,271 @@
+# cairn.toml — the schema for kev-dual's roadmap, experiments and issues.
+#
+# kev-dual is a research project, so the schema is built around experiments with
+# criteria fixed before the run (Kev's own convention in its PLAN.md), plus the
+# engineering work that makes them possible. Research and context live in docs/;
+# the plan lives here.
+#
+#   cairn config          show the resolved schema
+#   cairn check           validate every item against it
+#   man cairn             full reference
+
+format = 3
+
+[project]
+name = "kev-dual"
+description = "One model that thinks and decides: text generation plus Kev-style typed, calibrated decisions from one set of loaded weights."
+dir = "cairn/items"
+id_width = 4
+default_type = "feature"
+default_status = "backlog"
+
+# ─── Item types ──────────────────────────────────────────────────────────────
+
+# A phase of the plan. Each has an exit condition in its body.
+[[type]]
+name = "milestone"
+groups = "one"
+inverse = "scheduled"
+description = "a phase of the plan; its body states the exit condition"
+
+[[type]]
+name = "experiment"
+icon = "%"
+color = "magenta"
+description = "a run whose success criteria are written down before it starts"
+template = """
+## Question
+
+## Hypothesis
+
+## Setup
+
+Model, data split, seeds, hardware, exact command.
+
+## Gate (fixed before the run)
+
+Adopt if … ; otherwise … . Do not edit this section after the run starts.
+
+## Result
+
+<!-- Numbers with their run directory. Record `outcome`, `cost` and `run` in the fields. -->
+
+## Verdict
+"""
+
+[[type]]
+name = "spike"
+icon = "?"
+color = "blue"
+description = "a question answered from sources or a quick probe; the answer goes in the body (and docs/ if it lasts)"
+template = """
+## Question
+
+## Why it has to be answered first
+
+## What would settle it
+
+## Answer
+
+<!-- Filled in when the spike closes, with sources. A spike closed with no
+     answer recorded was a waste of the time it took. -->
+"""
+
+[[type]]
+name = "feature"
+icon = "+"
+color = "cyan"
+template = """
+## Problem
+
+## Proposal
+
+## Acceptance criteria
+
+- [ ]
+"""
+
+[[type]]
+name = "bug"
+icon = "!"
+color = "red"
+template = """
+## What happens
+
+## What should happen
+
+## Reproduction
+
+1.
+"""
+
+[[type]]
+name = "chore"
+icon = "~"
+color = "gray"
+
+[[type]]
+name = "docs"
+icon = "*"
+color = "blue"
+
+# ─── Statuses ────────────────────────────────────────────────────────────────
+
+[[status]]
+name = "backlog"
+category = "open"
+color = "gray"
+
+[[status]]
+name = "planned"
+category = "open"
+color = "blue"
+
+[[status]]
+name = "doing"
+label = "in progress"
+category = "active"
+color = "yellow"
+
+# A training or eval job is in flight (Modal or local); the item is waiting on
+# compute, not on a person.
+[[status]]
+name = "running"
+label = "job running"
+category = "active"
+color = "magenta"
+
+[[status]]
+name = "blocked"
+category = "active"
+color = "red"
+
+[[status]]
+name = "done"
+category = "done"
+color = "green"
+
+[[status]]
+name = "dropped"
+category = "dropped"
+color = "gray"
+board = false
+
+# ─── Custom fields ───────────────────────────────────────────────────────────
+
+[[field]]
+name = "due"
+kind = "date"
+description = "target date for a milestone"
+
+[[field]]
+name = "part_of"
+kind = "ref"
+target = "*"
+cardinality = "many"
+acyclic = true
+rollup = true
+inverse = "contains"
+description = "a larger piece of work this belongs to"
+
+[[field]]
+name = "priority"
+kind = "enum"
+values = ["p0", "p1", "p2", "p3"]
+default = "p2"
+column = true
+description = "p0 blocks the current milestone"
+
+[[field]]
+name = "effort"
+kind = "enum"
+values = ["s", "m", "l", "xl"]
+description = "Rough size, not an estimate"
+
+[[field]]
+name = "area"
+kind = "enum"
+values = [
+  "model",      # DualModel: loading, adapters, modes, the pointer head
+  "serving",    # the System One + generate endpoints, MLX/torch backends
+  "training",   # adapter training, question-side placement, Modal runs
+  "decide-eval",# Kev suites, jevbench, calibration
+  "text-eval",  # text-mode quality
+  "agent",      # the Mind2Web agent loop and its metrics
+  "data",       # dataset loaders and frozen splits
+  "infra",      # packaging, CI, tooling
+  "research",   # prior art, novelty checks
+  "launch",     # weights, model card, demo video
+]
+column = true
+description = "Subsystem this touches"
+
+[[field]]
+name = "outcome"
+kind = "enum"
+values = ["pass", "fail", "inconclusive"]
+column = true
+description = "an experiment's result against its pre-registered gate"
+
+[[field]]
+name = "cost"
+kind = "number"
+description = "GPU spend in USD, recorded when an experiment finishes"
+
+[[field]]
+name = "run"
+kind = "text"
+description = "where the results live: runs/<dir> or a Modal study name"
+
+# ─── Saved views ─────────────────────────────────────────────────────────────
+
+[[view]]
+name = "now"
+description = "What is being worked on or waiting on compute"
+filter = "category=active"
+sort = "priority,id"
+
+[[view]]
+name = "next"
+description = "Planned work"
+filter = "status=planned"
+sort = "priority,milestone"
+
+[[view]]
+name = "experiments"
+description = "Every experiment, its gate outcome and what it cost"
+filter = "type=experiment,category!=dropped"
+sort = "milestone,id"
+columns = ["id", "status", "title", "outcome", "cost", "run"]
+
+[[view]]
+name = "questions"
+description = "Open spikes: what still has to be answered"
+filter = "type=spike,category!=done,category!=dropped"
+sort = "priority,id"
+
+[[view]]
+name = "triage"
+description = "Items that still need a milestone"
+filter = "milestone=,category!=done,type!=milestone"
+columns = ["id", "type", "title", "created"]
+
+# ─── Hooks ───────────────────────────────────────────────────────────────────
+
+[hooks]
+after-create = "cairn render -q"
+after-change = "cairn render -q"
+after-remove = "cairn render -q"
+
+# ─── Rendered roadmap ────────────────────────────────────────────────────────
+
+[render]
+target = "ROADMAP.md"
+title = "kev-dual — Roadmap"
+group_by = "milestone"
+include = "category!=dropped"
+checkbox = true
+show_ids = true
+progress = true
+group_by_status = true
+link_items = false
